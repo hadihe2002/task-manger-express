@@ -8,7 +8,10 @@ export const authMiddleware = async (
   next: NextFunction,
 ) => {
   try {
-    const token = req.header("Authorization")!.replace("Bearer", "").trim();
+    const token = req.headers
+      .cookie!.split("Authorization=")[1]
+      .replace("Bearer", "")
+      .trim();
     const decoded = verify(token, "JWT@12345") as JwtPayload;
     const user = await User.findOne({
       _id: decoded._id,

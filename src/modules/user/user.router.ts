@@ -26,20 +26,24 @@ const upload = multer({
 
 export const userRouter = Router();
 
-userRouter.get("/users/:id/avatar", async (req: Request, res: Response) => {
-  try {
-    const user = await User.findById(req.params.id);
+userRouter.get(
+  "/users/me/avatar",
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      const user = await User.findById(req.user?._id);
 
-    if (!user || !user.avatar) {
-      throw new Error();
+      if (!user || !user.avatar) {
+        throw new Error();
+      }
+
+      res.set("Content-Type", "image/jpg");
+      res.send(user.avatar);
+    } catch (err) {
+      res.status(404).send();
     }
-
-    res.set("Content-Type", "image/jpg");
-    res.send(user.avatar);
-  } catch (err) {
-    res.status(404).send();
-  }
-});
+  },
+);
 
 userRouter.delete(
   "/users/me/avatar",
@@ -83,7 +87,8 @@ userRouter.post("/users/login", async (req: Request, res: Response) => {
       req.body.password,
     );
     const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
+    res.cookie("Authorization", token, { httpOnly: true });
+    res.redirect("/users/me");
   } catch (err: any) {
     res.status(500).send(err);
   }
