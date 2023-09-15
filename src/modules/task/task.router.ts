@@ -3,7 +3,8 @@ import { Task } from "../../db/collections";
 import { plainToInstance } from "class-transformer";
 import { UpdateTaskRequestDto } from "./dtos";
 import { authMiddleware } from "../../middleware/auth";
-import { CustomError, TASK_NOT_FOUND } from "../../errors";
+import { TASK_NOT_FOUND } from "../../errors";
+import { removeEmpty } from "../../utils";
 
 export const taskRouter = Router();
 
@@ -12,7 +13,22 @@ taskRouter.get(
   authMiddleware,
   async (req: Request, res: Response) => {
     try {
-      const tasks = await Task.find({ user: req.user!._id });
+      const match = { completed: req.query.completed };
+      removeEmpty(match);
+      const sort = { [`${req.query.sort}`]: req.query.sortType };
+      removeEmpty(sort);
+      const tasks = await Task.find(
+        {
+          user: req.user!._id,
+          ...match,
+        },
+        {},
+        {
+          limit: parseInt(req.query.limit as string) || 10,
+          skip: parseInt(req.query.skip as string) || 0,
+          sort,
+        },
+      );
       res.status(200).send(tasks);
     } catch (err) {
       res.send(err);

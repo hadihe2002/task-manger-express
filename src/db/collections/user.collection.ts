@@ -15,6 +15,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   age: number;
+  avatar: Buffer | null | undefined;
   tokens: { _id: string; token: string }[];
 }
 
@@ -32,49 +33,55 @@ export interface UserModel extends Model<IUser, {}, IUserMethods> {
 }
 
 // SCHEMA
-export const userSchema = new Schema<IUser, UserModel, IUserMethods>({
-  name: { type: "string", required: true, trim: true },
-  email: {
-    type: "string",
-    required: true,
-    trim: true,
-    unique: true,
-    lowercase: true,
-    validate(email: string) {
-      if (!validator.isEmail(email)) {
-        throw new Error("Email Is Invalid!");
-      }
-    },
-  },
-  password: {
-    type: "string",
-    required: true,
-    minlength: 8,
-    trim: true,
-    validate(value: string) {
-      if (value.toLocaleLowerCase().includes("password")) {
-        throw new Error("Password Should Not Contain 'password'!");
-      }
-    },
-  },
-  age: {
-    type: "number",
-    default: 0,
-    validate(value: number) {
-      if (value < 0) {
-        throw new Error("age must be an positive integer");
-      }
-    },
-  },
-  tokens: [
-    {
-      token: {
-        type: "string",
-        required: true,
+export const userSchema = new Schema<IUser, UserModel, IUserMethods>(
+  {
+    name: { type: "string", required: true, trim: true },
+    email: {
+      type: "string",
+      required: true,
+      trim: true,
+      unique: true,
+      lowercase: true,
+      validate(email: string) {
+        if (!validator.isEmail(email)) {
+          throw new Error("Email Is Invalid!");
+        }
       },
     },
-  ],
-});
+    password: {
+      type: "string",
+      required: true,
+      minlength: 8,
+      trim: true,
+      validate(value: string) {
+        if (value.toLocaleLowerCase().includes("password")) {
+          throw new Error("Password Should Not Contain 'password'!");
+        }
+      },
+    },
+    age: {
+      type: "number",
+      default: 0,
+      validate(value: number) {
+        if (value < 0) {
+          throw new Error("age must be an positive integer");
+        }
+      },
+    },
+    tokens: [
+      {
+        token: {
+          type: "string",
+          required: true,
+        },
+      },
+    ],
+    avatar: {
+      type: Buffer,
+    },
+  },
+  { timestamps: true },
+);
 
 // VIRTUAL RELATION
 userSchema.virtual("tasks", {
@@ -118,6 +125,7 @@ userSchema.set("toJSON", {
   transform: function (doc, ret) {
     delete ret.password;
     delete ret.tokens;
+    delete ret.avatar;
   },
 });
 

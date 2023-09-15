@@ -6,17 +6,20 @@ interface ITask extends Document {
   user: Schema.Types.ObjectId;
 }
 
-const taskSchema = new Schema<ITask>({
-  description: {
-    type: "string",
-    required: true,
-    trim: true,
+const taskSchema = new Schema<ITask>(
+  {
+    description: {
+      type: "string",
+      required: true,
+      trim: true,
+    },
+    completed: {
+      type: "boolean",
+      default: false,
+    },
+    user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   },
-  completed: {
-    type: "boolean",
-    default: false,
-  },
-  user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-});
+  { timestamps: true },
+);
 
 export const Task = model<ITask>("task", taskSchema);
