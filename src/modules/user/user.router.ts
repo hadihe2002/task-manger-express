@@ -174,3 +174,7 @@ userRouter.get(
     res.send(req.user);
   },
 );
+
+userRouter.get("/", async (req: Request, res: Response) => {
+  res.render("index", {});
+});
