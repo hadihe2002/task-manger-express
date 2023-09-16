@@ -103,7 +103,7 @@ userRouter.post("/users", async (req: Request, res: Response) => {
   try {
     await user.save();
     const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
+    res.redirect("/users/me");
   } catch (err) {
     res.status(500).send(err);
   }
