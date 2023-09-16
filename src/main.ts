@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(taskRouter);
 app.use(userRouter);
-// app.use((req, res, next) => {});
 
 app.set("views", `${__dirname}/public`);
 app.set("view engine", "mustache");

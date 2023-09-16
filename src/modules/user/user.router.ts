@@ -181,5 +181,13 @@ userRouter.get(
 );
 
 userRouter.get("/", async (req: Request, res: Response) => {
-  res.render("index", {});
+  res.redirect("/login");
+});
+
+userRouter.get("/signup", async (req: Request, res: Response) => {
+  res.render("signup", {});
+});
+
+userRouter.get("/login", async (req: Request, res: Response) => {
+  res.render("login", {});
 });
