@@ -19,6 +19,7 @@ dbConnect().catch((err) => console.log(err));
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.set("view engine", "html");
 app.engine("html", consolidate.swig);
@@ -27,6 +28,10 @@ app.set("views", path.join(__dirname, "public"));
 app.use(express.static(path.join(__dirname, "public")));
 
 const mainRouter = express.Router();
+mainRouter.get("/", (req, res) => {
+  res.redirect("/login.html");
+});
+
 app.use(mainRouter);
 app.use(taskRouter);
 app.use(userRouter);

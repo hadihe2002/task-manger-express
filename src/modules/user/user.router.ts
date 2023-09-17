@@ -176,18 +176,8 @@ userRouter.get(
   "/users/me",
   authMiddleware,
   async (req: Request, res: Response) => {
-    res.send(req.user);
+    const user = req.user!;
+    const avatar = String(req.user?.avatar);
+    res.render("user", { user: req.user, avatar });
   },
 );
-
-userRouter.get("/", async (req: Request, res: Response) => {
-  res.redirect("/login");
-});
-
-userRouter.get("/signup", async (req: Request, res: Response) => {
-  res.render("signup", {});
-});
-
-userRouter.get("/login", async (req: Request, res: Response) => {
-  res.render("login", {});
-});
