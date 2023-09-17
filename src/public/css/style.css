@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Rubik;
+  src: url(../fonts/Rubik.ttf);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,24 +11,27 @@
 
 body {
   background-image: linear-gradient(#0c8599, #3bc9db, #ffffff);
+  font-family: "Rubik";
 }
 
 .container {
   font-size: 48px;
   width: 800px;
   margin: 0 auto;
-  font-family: sans-serif;
   height: 100vh;
   display: flex;
   align-items: center;
 }
 
 .form {
+  color: #343a40;
   display: flex;
   flex-direction: column;
-  padding: 100px 200px;
+  padding: 30px 128px;
   border-radius: 10px;
   gap: 10px;
+  height: fit-content;
+  margin: 0 auto;
   background-color: #66d9e8;
   box-shadow: 0 12px 15px rgba(0, 0, 0, 0.2);
 }
@@ -35,6 +43,23 @@ button {
   font-size: 24px;
 }
 
+input {
+  background-color: #f1f3f5;
+}
+
+button[type="submit"] {
+  background-color: #1098ad;
+  color: white;
+  font-weight: 700;
+  transition: all 0.3s ease-in-out;
+  margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
 p {
   margin-top: 12px;
   font-size: 16px;
@@ -42,14 +67,13 @@ p {
 
 button {
   background-color: #c5f6fa;
-  color: black;
 }
 
 label {
   font-size: 24px;
-  color: black;
 }
+
 h3 {
-  margin-bottom: 30px;
+  margin-bottom: 16px;
   align-self: center;
 }
